@@ -46,7 +46,7 @@
 
     * Unit Testing
 
-        * Testing small pieces of code such as pure functions, utility functions, etc. 
+        * Testing small pieces of code such as pure functions, utility functions, helper functions, etc. 
         
         * You're testing self-contained functions with unit testing.
 
@@ -62,4 +62,10 @@
 
         * It's also testing how it works with external, third-party resources.
 
-            * Testing your app on how well it works with Stripe,Amazon Web Service, Heroku - some kind of external service.
+            * Testing your app on how well it works with Stripe, Amazon Web Service, Heroku - some kind of external service.
+
+    * Snapshot Testing
+
+        * Looking for differences between previously saved snapshots of data
+
+7. We have all different kinds of testing and they're all testing different things. When we're testing the backend, we usually use Unit Tests for our pure functions and our utility functions. 

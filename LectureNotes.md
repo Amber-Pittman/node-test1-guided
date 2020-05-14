@@ -566,9 +566,19 @@
     
     * We've updated the adds test. Now update the function to support it. While a for loop would work, there is another way. 
 
-    * You can pass through an array by using the spread operator. That's going to give you all the values/params as an array. Now instead of returning A + B, we can use the reduce function with 2 values and then return them and add together A + B and start out with an initial value of zero. That's it! Test pass!
+    * You can pass through an array by using the spread operator. That's going to give you all the values/params as an array. Now instead of returning A + B, we can use the reduce function with 2 values and then return them and add together A + B and start out with an initial value of zero. 
+
+        * You have to specify an initial value because you have to tell reduce where to start adding from. If you specify 10, then it would add all the numbers starting at 10; therefore, skipping 1-9.
+
+        * If you don't specify anything in reduce, that that's undefined. You can't add a number to undefined.
+        
+        * That's it! Test pass!
 
     * Do the same thing with your subtract and multiply function. 
+
+    * If you try to refactor the divide function, things can get tricky because you'll need to check for zero values and things like that. 
+
+    * We've successfully refactored our functions without changing our original tests; without introducing a regression
 
     ```
     it("adds", () => {
@@ -590,3 +600,7 @@
         return values.reduce((a, b) => a + b, 0)
     }
     ```
+
+15. Now you can leave your file as it is. You could build out your application, have a hundred different endpoints, using your calculator, and all of them doing calculations. Before you deploy it and send it up to Heroku or a live environment, you can just come into terminal and just run `npm test`. If at any point you changed something that broke a test/some of your previous code, your tests are going to fail. You can go find the failure to fix it so that you don't have any unexpected bugs. That is testing in a nutshell.
+
+### Done!

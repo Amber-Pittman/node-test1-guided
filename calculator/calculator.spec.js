@@ -20,6 +20,8 @@ describe("calculator unit tests", () => {
         expect(calculator.add()).toBe(0)
         expect(calculator.add(5, null)).toBe(5)
         expect(calculator.add(18, "40")).toBe("1840") // Combining a num and string creates a string result
+        expect(calculator.add(2, 2, 2)).toBe(6)
+        expect(calculator.add(1, 2, 3, 4, 5, 6, 7, 8, 9)).toBe(45)
     })
 
     it("subtracts", () => {
@@ -59,6 +61,7 @@ describe("calculator unit tests", () => {
         expect(() => calculator.divide(16, 0)).toThrow() 
         expect(calculator.divide()).toBe(1)
         expect(calculator.divide(18, "40")).toBe(0.45)
+        //expect(() => calculator.divide("hello world")).toThrow() // throws TypeError
     })
 })
 

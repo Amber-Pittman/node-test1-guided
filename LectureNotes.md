@@ -515,6 +515,22 @@
 
         * Let's fix the function so it throws if either of those values are 0. Before the return in the divide function, write an if statement. If the 0 is the first param, it can be divided. If b is equal to 0, throw new error with a message explaining that it can't divide by zero. Success! It is now passing.
 
+    * We can take our function further and test the data type of the parameters to make sure there are numbers. In the divide function, let's check to make sure that each param is a number. What if we try to call divide with a string? What if we try to call divide and we pass "hello world?"
+
+        * This is something you don't have to think about if you've used TypeScript. If you're using TypeScript, it's going to yell at you and say that you can't pass strings to a function that expects numbers. 
+        
+        * However, this is just JavaScript so that's not going to do anything. It's just going to fail _quietly_. It'll say that it received a NaN when it expected 1. We should really expect that to throw an error. Change the end from `.toBe(1)` to `.toThrow()` and then wrap it in a HOF like we did when we divided by 0. 
+
+        * The test is still going to fail but we can fix it now. It's expected it to throw when it didn't. So now inside our divide function, we can check type.
+
+            * There are a few different ways to check the type. 
+                
+                * The easiest way is by using an if statement to check typeOf the first parameter doesn't equal a number or typeOf the second param doesn't equal a number. Then we can throw a new type error and say that the template string expected a number but got something else. This is what we'll be using.
+
+                * Another type is Flow. That's one you'll hear about - like Facebook's type checking JavaScript subset. 
+
+            * Now if someone tries passing a string, an object, an array, or something that wasn't expected in that function, it will return an error.
+
     ```
     it("divides", () => {
         expect(calculator.divide(2, 2)).toBe(1)
@@ -525,14 +541,52 @@
         expect(() => calculator.divide(16, 0)).toThrow() 
         expect(calculator.divide()).toBe(1)
         expect(calculator.divide(18, "40")).toBe(0.45)
+        expect(() => calculator.divide("hello world")).toThrow() 
     })
 
     // calculator.js \\
     
     function divide(a = 1, b = 1) {
+        if (typeof a !== "number" || typeof b !== "number") {
+            throw new TypeError("Expected a number, got something else")
+        }
+        
         if (b === 0) {
             throw new Error("Cannot divide by zero.")
         }
         return a / b
+    }
+    ```
+
+14. Let's refactor one of these functions to do something a little bit different. Remember in the TDD flow, the Refactor step comes after making the test pass. This refactor step can happen many different times over a long period of time. Our code changes over time as features change, requirements change. Our code is going to change a little bit over time. As a result, our tests are going to change a little bit as well. 
+
+    * Let's refactor our add function. Get the add function to set more than 2 parameters. Let's pretend our new requirement right now is that we need the add function to accept any number of numbers rather than just 2 numbers. We want to be able to add 20 numbers if we need to. We'll need to refactor the function and then the tests to make that work.
+
+    * In the add test, we want to test the new functionality. We want to be able to call `expect(calculator.add())` and we pass 3 numbers into it instead of just 2. How about calling it with 9 numbers? Side Note: You could do it as an array if you didn't want to do it as multiple parameters. You will learn how to do this later.
+    
+    * We've updated the adds test. Now update the function to support it. While a for loop would work, there is another way. 
+
+    * You can pass through an array by using the spread operator. That's going to give you all the values/params as an array. Now instead of returning A + B, we can use the reduce function with 2 values and then return them and add together A + B and start out with an initial value of zero. That's it! Test pass!
+
+    * Do the same thing with your subtract and multiply function. 
+
+    ```
+    it("adds", () => {
+        expect(calculator.add(2, 2)).toBe(4)
+        expect(calculator.add(2, 10)).toBe(12)
+        expect(calculator.add(3, 2)).toBe(5)
+        expect(calculator.add(0, 2)).toBe(2)
+        expect(calculator.add(-2, 3)).toBe(1)
+        expect(calculator.add(16)).toBe(16)
+        expect(calculator.add()).toBe(0)
+        expect(calculator.add(5, null)).toBe(5)
+        expect(calculator.add(18, "40")).toBe("1840") // Combining a num and string creates a string result
+        expect(calculator.add(2, 2, 2)).toBe(6)
+        expect(calculator.add(1, 2, 3, 4, 5, 6, 7, 8, 9)).toBe(45)
+    })
+    
+
+    function add(...values) {
+        return values.reduce((a, b) => a + b, 0)
     }
     ```

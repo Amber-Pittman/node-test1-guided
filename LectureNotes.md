@@ -46,7 +46,7 @@
 
     * Unit Testing
 
-        * Testing small pieces of code such as pure functions, utility functions, helper functions, etc. 
+        * Testing small pieces of code such as pure functions, utility/helper/pure functions, etc. 
         
         * You're testing self-contained functions with unit testing.
 
@@ -92,7 +92,7 @@
         
         * What type of data are we testing?
 
-        * Are we testing a frontend React app with user interactons, keyboard events, etc? 
+        * Are we testing a frontend React app with user interactions, keyboard events, etc? 
 
         * Are we testing pure data that just comes from an API endpoint? 
 
@@ -108,7 +108,7 @@
 
         * Response codes
 
-        * Functions - utility functions, helper functions, model functions
+        * Functions - utility/helper/pure functions, model functions
 
         * The database - the interaction with the DB and the actual DB; 
             
@@ -126,8 +126,16 @@
     
     * It can be used to test in any JavaScript code in reality. It doesn't matter what the environment is as long as the language is JavaScript. 
 
-    * Since we're already familiar with Jest, we can just use that to set up these tests as Jest is more than enough to test utility functions, response objects, and database data. 
+    * Since we're already familiar with Jest, we can just use that to set up these tests as Jest is more than enough to test helper/utility/pure functions, response objects, and database data. 
+
+10. Student Questions:
+
+    * **Q:** What's the difference between a helper, a pure, and a utility function? <br> **A:** There is no difference. You can use those terms interchangeably. When referring to this type of function, it's a function that does one thing. They should always return the same result if they receive the same inputs. If you remember from React and pure functions, the function receives the same input. If it's a pure function, it will always return the same thing. 
+
+    * **Q:** What's a function that might not be a helper function or is not a pure function? <br> **A:** A model function is a perfect example of this. It is something with side-effects. A model function queries data from a database and it's _not_ guaranteed to always return the same result. It could always return something different depending on what's in your database. 
 
 ### Code Along!
 
 1. Install Jest as a dev dependency `npm install --save-dev jest`
+
+2. 

@@ -138,4 +138,86 @@
 
 1. Install Jest as a dev dependency `npm install --save-dev jest`
 
-2. 
+2. In order for Jest to find our test files when it runs, our tests have to be either in a folder called `__tests__` **_or_** if you have any files names in your project that end with `.test.js` or `.spec.js`.
+
+    * By default, Jest looks in the __tests__ folder's test files first. 
+
+    * Depending on the type of test, it's kind of convention to keep your unit tests in spec files or test files right next to the function they're testing. 
+
+    * If you're writing integration tests, it makes more sense to put integration tests in their own folder somewhere.  
+
+3. Since we're only writing unit tests in this lecture, we're just going to be working from these spec files. Open the empty `calculator.spec.js` file. Add our first test.
+
+    * Call tests as a function and give it a description. Add a callback as the second param. 
+
+        ```
+        test("runs our first test", () => {})
+        ```
+
+    * Inside the callback, write our assertions. For example we can expect 1+1 to be 2.  
+
+        ```
+        test("runs our first test", () => {
+            expect(1 + 1).toBe(2)
+        })
+        ```
+    * Our first unit test isn't really doing anything with the calculator yet. We're just kind of setting things up so we can run them later on. 
+
+    * If we tried to run this file with node with `node calculator/calculator.spec.js`, we're going to get an error saying the test is not defined. That's because we have to run this with Jest. Right now, it isn't using Jest at all.
+
+4. Go into package.json. Inside the file, create a new script for running the test suite. Now, when we run NPM tests, it's going to run Jest. 
+
+    * Jest is going to go through our project and find all of our test files. Since the file ends with a `.spec`, it's going to find this file and run the test. 
+
+    ```
+    "scripts": {
+        "test": "jest",
+    },
+    ```
+
+    * Go to your terminal and run `npm test`.
+
+        * You'll see that Jest automatically finds our spec file and runs the tests inside it.
+
+        * Since 1 + 1 does equal 2, our test passes. 
+
+    * Try changing the value of 2 to 3 then save your file. Run the test again. Obviously, 1 + 1 does _not_ equal 3, so the test fails.
+
+        * "We're receiving the value of 2 but you're telling us it should be 3. That's incorrect."
+
+    * **Q:** Where are these global variables, the values tests expect coming from? We didn't import them anywhere, so where are these functions coming from? **A:** They're coming from Jest. They're what's known as _Globals_.
+
+        * When we run Jest through our test script, it actually injects some global variables into the default namespace. So we can just call those functions without having to import them anywhere. 
+
+        * It makes writing our tests a little bit easier. 
+
+        * You can see a [list of all of Jest's Globals](https://jestjs.io/docs/en/api) if you're interested. 
+
+            * These globals are just available without importing anything
+
+            * We have tests, describe (we'll talk about a bit later), run functions before and after each test, or before and after your entire testing suite, before each, after each, etc.
+
+5. Instead of restarting the test command over and over every time you want to do a test, specify a `watch` flag with Jest. 
+
+    * We want to keep that test script as jest without actually watching if we just want to have a one-off instance of running our tests. 
+
+    * If we're actively developing and changing stuff, we might want to create another script and call it `test:watch`. 
+
+    * Now, instead of running `npm test`, run `npm run test:watch`.
+
+        * Calling jest with --to-watch or --watch only watches the files that are a part of your tests.
+
+        * Using -watchAll has Jest watch all of your files, whether or not it's being tested.
+
+    * It runs our failing test again, as Jest is still expecting it to be 3. Without stopping the script, go into our code and change that value back to 2. 
+
+    * Immediately after we save our spec file, Jest tests. 
+
+    * Consider it a 2nd pair of eyes in the background. Anytime we change anything in our code, it's going to rerun our tests to make sure nothing broke. 
+
+    ```
+    "scripts": {
+		"test": "jest",
+		"test:watch": "jest --watch"
+	},
+    ```

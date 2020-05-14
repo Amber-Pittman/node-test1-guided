@@ -226,111 +226,131 @@
 
 7. We're going to create a really basic calculator file just by defining functions for adding, subtracting, multiplying, and dividing numbers. That's it. Then, we're going to write tests for each function. Go to the calculator file.
 
-    * Start with the add function. 
+8. Start with the add function. 
+    
+    * Take in 2 parameters. We'll take in 2 numbers that we'll add together and return the result.
+
+    * Since this function is going to be used in the test/spec file, we need to need to export it.
+
+    * Considering we're going to have multiple functions in the file, we'll export an object.
+
+    * Now create a test for this function. Git rid of the placeholder test. 
+
+        * Import the calculator. 
+
+        * Create a new test and use the add function from the calculator file.
+
+        * Give it a callback.
+
+        * Inside the callback, we need to test the result of the add function. Just say calculator.add. 
+
+        * Let's pass in 2 and 2. 
+
+        * Assign a variable to calculator.add().
+
+        * Assert the result. You can expect the result to be 4.
+
+        * Success! The automated test should show a Passing result on this real function. 
         
-        * Take in 2 parameters. We'll take in 2 numbers that we'll add together and return the result.
+    ```
+    // calculator.js\\
 
-        * Since this function is going to be used in the test/spec file, we need to need to export it.
+    function add(a, b) {
+        return a + b
+    }
 
-        * Considering we're going to have multiple functions in the file, we'll export an object.
+    module.exports = {
+        add,
+    }
 
-        * Now create a test for this function. Git rid of the placeholder test. 
+    // calculator.spec.js \\
 
-            * Import the calculator. 
+    const calculator = require("./calculator")
 
-            * Create a new test and use the add function from the calculator file.
+    test("add()", () => {
+        const result = calculator.add(2, 2)
+        expect(result).toBe(4)
+    })
+    ```
 
-            * Give it a callback.
+    * If another dev comes behind you and doesn't realize they've changed the add function's plus sign to a multiplication symbol, your test on the add function still passes. But why? Think about the arithmetic here: 2 + 2 is 4 _but_ 2 * 2 is also equal to 4. 
 
-            * Inside the callback, we need to test the result of the add function. Just say calculator.add. 
+        * This test, as it stands, could potentially give us a false-positive. It's telling us that everything is okay when it's really not.
 
-            * Let's pass in 2 and 2. 
+        * To prevent false-positives, create more use-cases. 
 
-            * Assign a variable to calculator.add().
+        * Our tests really should contain multiple assertions, not just one. We can have multiple expect calls in a single test, rather than just one. 
 
-            * Assert the result. You can expect the result to be 4.
+            * We should be calling our function with a whole bunch of different values just to see what it does.
 
-            * Success! The automated test should show a Passing result on this real function. 
+            * Let's refactor this a little. Since we're going to have multiple expect calls, you can actually just pass calculator.add; you don't have to assign it to a variable. Just pass that directly to expect as a one-liner. 
             
-        ```
-        // calculator.js\\
+            * Don't forget to change the multiplication symbol back to a + sign if you want your test to pass.
 
-        function add(a, b) {
-            return a + b
-        }
+    * Add more assertions now that the test has been refactored.
 
-        module.exports = {
-            add,
-        }
+        * We should be thinking of all the different pieces of data that could potentially get passed to our function. 
+            
+            * Try it with a zero to make sure it still works. 
 
-        // calculator.spec.js \\
+            * Maybe try it with a negative
 
-        const calculator = require("./calculator")
+            * Try it with a missing parameter. Without a 2nd param, test fails
 
-        test("add()", () => {
-            const result = calculator.add(2, 2)
-            expect(result).toBe(4)
-        })
-        ```
+            * What about no params? Without the params, test fails
 
-        * If another dev comes behind you and doesn't realize they've changed the add function's plus sign to a multiplication symbol, your test on the add function still passes. But why? Think about the arithmetic here: 2 + 2 is 4 _but_ 2 * 2 is also equal to 4. 
+            * What happens when you try passing in _null_? 
 
-            * This test, as it stands, could potentially give us a false-positive. It's telling us that everything is okay when it's really not.
+            * If you pass in a string, what happens?
 
-            * To prevent false-positives, create more use-cases. 
+        * To correct the issue with missing params, give a default value to each in the function. `a = 0, b = 0` That way, if one or both of the values are not passed in, it just defaults to zero for the missing param(s).
 
-            * Our tests really should contain multiple assertions, not just one. We can have multiple expect calls in a single test, rather than just one. 
+    ```
+    // calculator.js\\
 
-                * We should be calling our function with a whole bunch of different values just to see what it does.
+    function add(a = 0, b = 0) {
+        return a + b
+    }
 
-                * Let's refactor this a little. Since we're going to have multiple expect calls, you can actually just pass calculator.add; you don't have to assign it to a variable. Just pass that directly to expect as a one-liner. 
-                
-                * Don't forget to change the multiplication symbol back to a + sign if you want your test to pass.
+    module.exports = {
+        add,
+    }
 
-        * Add more assertions now that the test has been refactored.
+    // calculator.spec.js \\
 
-            * We should be thinking of all the different pieces of data that could potentially get passed to our function. 
-                
-                * Try it with a zero to make sure it still works. 
+    const calculator = require("./calculator")
 
-                * Maybe try it with a negative
+    test("add()", () => {
+        expect(calculator.add(2, 2)).toBe(4)
+        expect(calculator.add(2, 10)).toBe(12)
+        expect(calculator.add(3, 2)).toBe(5)
+        expect(calculator.add(0, 2)).toBe(2)
+        expect(calculator.add(-2, 3)).toBe(1)
+        expect(calculator.add(16)).toBe(16)
+        expect(calculator.add()).toBe(0)
+        expect(calculator.add(5, null)).toBe(5)
+        expect(calculator.add(18, "40")).toBe(NaN)
+    })
+    ```
 
-                * Try it with a missing parameter. Without a 2nd param, test fails
+9. Test Driven Development
+        
+    * We're going to do it a little bit different this time. Instead of writing the function and then writing the test for it, we're actually going to do the opposite.  
 
-                * What about no params? Without the params, test fails
+    * We'll write the test first and then create the function. This is a process that you'll come across a lot. This is known as TDD - Test Driven Development.
 
-                * What happens when you try passing in _null_? 
+    * **Test Driven Development** is the process of development when you write the test first and then you write the supporting code that actually makes the test pass. 
+        
+        * This helps a lot with writing higher quality code because you kind of have to think about what the function actually does. 
+        
+        * Although there are all of the edge cases, you have to think about that stuff ahead of time before you actually write the code. That way, when you go in and actually write the function, you know exactly what it's supposed to do. You know exactly what parameters you're working with so you can just write it really quickly.
+        
+        * It's _proactive_, not reactive.
 
-                * If you pass in a string, what happens?
+        * In TDD, we start out by writing a test. It's going to be failing because we don't have any code that supports it yet. Then, we're going to write the supporting code that makes the test pass. Later down the road, if we need to, we can refactor the test to include more edge cases or change the expected values, or features change, etc. 
 
-            * To correct the issue with missing params, give a default value to each in the function. `a = 0, b = 0` That way, if one or both of the values are not passed in, it just defaults to zero for the missing param(s).
+10. Create the subtract function. 
 
-        ```
-        // calculator.js\\
+    * Since we're now dealing with multiple tests in a single file, we can use another one of those Jest Globals, which is _describe_.
 
-        function add(a = 0, b = 0) {
-            return a + b
-        }
-
-        module.exports = {
-            add,
-        }
-
-        // calculator.spec.js \\
-
-        const calculator = require("./calculator")
-
-        test("add()", () => {
-            expect(calculator.add(2, 2)).toBe(4)
-            expect(calculator.add(2, 10)).toBe(12)
-            expect(calculator.add(3, 2)).toBe(5)
-            expect(calculator.add(0, 2)).toBe(2)
-            expect(calculator.add(-2, 3)).toBe(1)
-            expect(calculator.add(16)).toBe(16)
-            expect(calculator.add()).toBe(0)
-            expect(calculator.add(5, null)).toBe(5)
-            expect(calculator.add(18, "40")).toBe(NaN)
-        })
-        ```
-
-    * Create the subtract function.
+    * Describe creates a block that groups together several related tests. Since add and subtract are related tests, let's put them in a describe block.

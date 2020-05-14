@@ -62,10 +62,72 @@
 
         * It's also testing how it works with external, third-party resources.
 
-            * Testing your app on how well it works with Stripe, Amazon Web Service, Heroku - some kind of external service.
+            * Testing your app on how well it works with Stripe, Amazon Web Services, Heroku - some kind of external service.
 
     * Snapshot Testing
 
         * Looking for differences between previously saved snapshots of data
 
-7. We have all different kinds of testing and they're all testing different things. When we're testing the backend, we usually use Unit Tests for our pure functions and our utility functions. 
+7. We have all different kinds of testing and they're all testing different things. 
+
+    * When we're testing the backend, we usually use Unit Tests for our pure functions and our utility functions. 
+    
+    * Then we're going to use integration tests to test route handlers and middleware. 
+    
+    * We're not going to worry about implementing any end-to-end tests, snapshot tests, or A/B tests.
+
+    * Instead, we're going to focus on Unit Tests and Integration Tests. 
+
+    * During this lecture, we're going to focus _solely_ on unit testing. 
+
+8. Tooling - tools used to help us run automated tests.
+
+    * You may remember in Frontend using Jest or React-Testing-Library
+
+    * We're going to use Jest. 
+
+    * When choosing a tool, we must ask ourselves: 
+        
+        * What are we testing? 
+        
+        * What type of data are we testing?
+
+        * Are we testing a frontend React app with user interactons, keyboard events, etc? 
+
+        * Are we testing pure data that just comes from an API endpoint? 
+
+        * Are we testing an integration with a third-party server like Stripe or Heroku?
+
+        * Are we testing pure functions?
+
+    * When it comes to our backend, what should we really be testing? What are the things we're going to be testing in our backend? 
+
+        * The response data
+
+        * Response headers
+
+        * Response codes
+
+        * Functions - utility functions, helper functions, model functions
+
+        * The database - the interaction with the DB and the actual DB; 
+            
+            * making sure it saves the data that's supposed to be saved
+
+            * Making sure it retrieves the data that is supposed to be retrieved
+
+    * We're going to focus on testing the utility functions, the response objects, and the data in our database. 
+
+9. All [Jest](https://jestjs.io/) is, is a test-runner - a testing framework. 
+
+    * Jest takes in a whole bunch of test code and runs against our app's code.
+
+    * Jest is a pretty generic tool; not only can it be used to test the frontend but it can test the backend as well. 
+    
+    * It can be used to test in any JavaScript code in reality. It doesn't matter what the environment is as long as the language is JavaScript. 
+
+    * Since we're already familiar with Jest, we can just use that to set up these tests as Jest is more than enough to test utility functions, response objects, and database data. 
+
+### Code Along!
+
+1. Install Jest as a dev dependency `npm install --save-dev jest`

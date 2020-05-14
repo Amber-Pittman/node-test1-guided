@@ -354,3 +354,185 @@
     * Since we're now dealing with multiple tests in a single file, we can use another one of those Jest Globals, which is _describe_.
 
     * Describe creates a block that groups together several related tests. Since add and subtract are related tests, let's put them in a describe block.
+
+    * In your describe block, let's say "calculator unit tests."
+
+    * Then, inside of the callback we can put in our actual tests. Go ahead and put the add test inside it.
+
+        * This makes the messages in the terminal's console a little bit cleaner when we have failing tests
+
+        * It helps us with setting up variables and tests. If we have a lot of them that depend n the same data, it's always good to group related tests together. 
+
+    * A lot of the times in automated testing, you'll see inside of the describe block that instead of test, you'll have a function called "it." The "it" is a synonym for test. 
+
+        * If you want it to read a little better, you'd say "Calculate your unit tests" and then inside of your string you could put something a bit more descriptive like "adds." 
+        
+        * Some devs reading through this, described calculator unit tests, it adds, then does the assertions, then it subtracts and does the assertions for subtract. 
+
+    * For the sake of time, copy and paste the assertions from the adds test. 
+
+    ```
+    // calculator.spec.js \\
+
+    const calculator = require("./calculator")
+
+    describe("calculator unit tests", () => {
+        it("adds", () => {
+            expect(calculator.add(2, 2)).toBe(4)
+            expect(calculator.add(2, 10)).toBe(12)
+            expect(calculator.add(3, 2)).toBe(5)
+            expect(calculator.add(0, 2)).toBe(2)
+            expect(calculator.add(-2, 3)).toBe(1)
+            expect(calculator.add(16)).toBe(16)
+            expect(calculator.add()).toBe(0)
+            expect(calculator.add(5, null)).toBe(5)
+            expect(calculator.add(18, "40")).toBe("1840") 
+        })
+
+        it("subtracts", () => {
+            expect(calculator.subtract(2, 2)).toBe(0)
+            expect(calculator.subtract(2, 10)).toBe(-8)
+            expect(calculator.subtract(3, 2)).toBe(1)
+            expect(calculator.subtract(0, 2)).toBe(-2)
+            expect(calculator.subtract(-2, 3)).toBe(-5)
+            expect(calculator.subtract(-1, -2)).toBe(1)
+            expect(calculator.subtract(-4, 2)).toBe(-6)
+            expect(calculator.subtract(16)).toBe(16) 
+            expect(calculator.subtract()).toBe(0)
+            expect(calculator.subtract(5, null)).toBe(5)
+            //expect(calculator.subtract(18, "40")).toBe(NaN) // Fails, returns -22
+            expect(calculator.subtract(18, "40")).toBe(-22)
+        })
+    })    
+    ```
+
+11. Now, on your own, create tests for multiple and subtract and then create the supporting calculator functions so your tests pass. 
+
+    ```
+    // spec file \\
+
+    const calculator = require("./calculator")
+
+    describe("calculator unit tests", () => {
+        it("adds", () => {
+            expect(calculator.add(2, 2)).toBe(4)
+            expect(calculator.add(2, 10)).toBe(12)
+            expect(calculator.add(3, 2)).toBe(5)
+            expect(calculator.add(0, 2)).toBe(2)
+            expect(calculator.add(-2, 3)).toBe(1)
+            expect(calculator.add(16)).toBe(16)
+            expect(calculator.add()).toBe(0)
+            expect(calculator.add(5, null)).toBe(5)
+            expect(calculator.add(18, "40")).toBe("1840")
+        })
+
+        it("subtracts", () => {
+            expect(calculator.subtract(2, 2)).toBe(0)
+            expect(calculator.subtract(2, 10)).toBe(-8)
+            expect(calculator.subtract(3, 2)).toBe(1)
+            expect(calculator.subtract(0, 2)).toBe(-2)
+            expect(calculator.subtract(-2, 3)).toBe(-5)
+            expect(calculator.subtract(-1, -2)).toBe(1)
+            expect(calculator.subtract(-4, 2)).toBe(-6)
+            expect(calculator.subtract(16)).toBe(16) 
+            expect(calculator.subtract()).toBe(0)
+            expect(calculator.subtract(5, null)).toBe(5)
+            //expect(calculator.subtract(18, "40")).toBe(NaN) // Fails, returns -22
+            expect(calculator.subtract(18, "40")).toBe(-22)
+        })
+
+        it("multiplies", () => {
+            expect(calculator.multiply(2, 2)).toBe(4)
+            expect(calculator.multiply(2, 10)).toBe(20)
+            expect(calculator.multiply(3, 2)).toBe(6)
+            expect(calculator.multiply(0, 2)).toBe(0)
+            expect(calculator.multiply(-2, 3)).toBe(-6)
+            expect(calculator.multiply(16)).toBe(0) // 0 because the 2nd param is defaulted to 0
+            expect(calculator.multiply()).toBe(0)
+            expect(calculator.multiply(5, null)).toBe(0) // 0 because the 2nd param is defaulted to 0
+            //expect(calculator.multiply(18, "40")).toBe(NaN) // Fails, returns 720
+            expect(calculator.multiply(18, "40")).toBe(720)
+        })
+        
+        it("divides", () => {
+            expect(calculator.divide(2, 2)).toBe(1)
+            expect(calculator.divide(2, 10)).toBe(0.2)
+            expect(calculator.divide(3, 2)).toBe(1.5)
+            expect(calculator.divide(0, 2)).toBe(0) // Can't divide by zero
+            expect(calculator.divide(-2, 3)).toBe(-0.6666666666666666)
+            //expect(calculator.divide(16)).toBe(0) // Can't divide by zero - Makes it Infinity
+            expect(calculator.divide()).toBe(NaN) // Can't divide by zero
+            //expect(calculator.divide(5, null)).toBe(0) // Can't divide by zero
+            //expect(calculator.divide(18, "40")).toBe(NaN) // Fails, returns 720
+            expect(calculator.divide(18, "40")).toBe(0.45)
+        })
+    })
+
+
+    // calculator functions file \\
+
+    function add(a = 0, b = 0) {
+    return a + b
+    }
+
+    function subtract(a = 0, b = 0) {
+        return a - b
+    }
+
+    function multiply(a = 0, b = 0) {
+        return a * b
+    }
+
+    function divide(a = 0, b = 0) {
+        return a / b
+    }
+
+    module.exports = {
+        add,
+        subtract,
+        multiply,
+        divide,
+    }
+    ```
+
+12. Now let's walk through the multiply function first. Just going to copy the assertion block again and change them as need be. In the functions file, use the same logic from subtract, changing - to *.
+
+13. The divide test is a little trickier. You can't divide by 0, as it gives you some kind of invalid value leading to an error. Copy the test block again and change it to divides and then the function on the calculator to divide. 
+
+    * Since you can't divide by 0, you can change the assertion a little bit. If you go into the [Jest Documentation](https://jestjs.io/docs/en/expect#methods), go down to Expect under the API Reference tab.  It will give you all the assertions you can run. 
+
+    * We've been using `.toBe()` but there's also a whole bunch of other ones. The one we want to use is `.toThrow(error?)`. Take a look at the [toThrow information](https://jestjs.io/docs/en/expect#tothrowerror). 
+    
+    * Let's write our function to throw an error if it's trying to divide by zero. 
+        
+        * For our assertion, let's say that if you try to divide by zero, expect it to throw. 
+        
+        * Then, instead of passing the function directly to expect when we're checking for throws, we have to pass a HOF, otherwise it will just throw right away. We don't want it to throw right away. Instead, we want to throw under the control of the test runner. We want the error to be "this function didn't throw." We don't want the error to be NaN. 
+
+        * When we're not passing in any params, do we want it to throw an error? Probably not. For the default function, what if we made the default value a 1? That way, even though we only pass one param, it will still return a valid value. So if that default value is 1 and we've called divide with 1, then it should output 1. Same thing if we don't pass in any params. 
+
+        * Now let's write our function to see if our tests pass. Make sure to change the default values from 0 to 1. As of now, the tests do not pass. Received function did not throw when it was expected to throw. If we're calling divides with a zero param like it should be. 
+
+        * Let's fix the function so it throws if either of those values are 0. Before the return in the divide function, write an if statement. If the 0 is the first param, it can be divided. If b is equal to 0, throw new error with a message explaining that it can't divide by zero. Success! It is now passing.
+
+    ```
+    it("divides", () => {
+        expect(calculator.divide(2, 2)).toBe(1)
+        expect(calculator.divide(2, 10)).toBe(0.2)
+        expect(calculator.divide(3, 2)).toBe(1.5)
+        expect(calculator.divide(0, 2)).toBe(0) 
+        expect(calculator.divide(-2, 3)).toBe(-0.6666666666666666)
+        expect(() => calculator.divide(16, 0)).toThrow() 
+        expect(calculator.divide()).toBe(1)
+        expect(calculator.divide(18, "40")).toBe(0.45)
+    })
+
+    // calculator.js \\
+    
+    function divide(a = 1, b = 1) {
+        if (b === 0) {
+            throw new Error("Cannot divide by zero.")
+        }
+        return a / b
+    }
+    ```
